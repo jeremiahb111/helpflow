@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+dialog::backdrop {
+  background-color: rgba(255, 255, 255, 0.3);
+  /* Light transparent background */
+  backdrop-filter: blur(4px);
+  /* Blur effect */
+}
