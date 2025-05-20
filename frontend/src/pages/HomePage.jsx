@@ -52,7 +52,7 @@ const HomePage = () => {
   if (isLoading) return <PageLoader />;
 
   return (
-    <div className="p-6">
+    <div className="p-6 h-screen flex flex-col">
       <div className="flex justify-between items-center">
         <div className="flex items-center justify-between w-full gap-4">
           <h1 className="text-4xl font-bold">Tickets</h1>
@@ -109,7 +109,11 @@ const HomePage = () => {
       </div>
 
       {/* Tickets Table */}
-      <TicketsTable tickets={tickets} />
+      <div className="flex-1 mt-4 min-h-0">
+        <TicketsTable tickets={tickets} />
+      </div>
+
+
 
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
