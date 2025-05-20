@@ -46,5 +46,5 @@ app.use(errorHandler)
 
 app.listen(port, async () => {
   console.info(`Server running on port ${port}`)
-  // await connectDB()
+  await connectDB()
 })
