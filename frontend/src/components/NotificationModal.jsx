@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Loader, MessageCircleMore, Ticket, UserPlus2, XIcon } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
@@ -41,10 +42,21 @@ const isReadNotif = (isReadByUser, userId) => {
 }
 
 const NotificationModal = ({ setShowNotification, notifications }) => {
-  const { authUser } = useAuth()
-  const { markAsReadNotif, isPending } = useMarkAsReadNotif()
-
+  const [loadingMap, setLoadingMap] = useState({})
   const navigate = useNavigate()
+
+  const { authUser } = useAuth()
+  const { markAsReadNotif } = useMarkAsReadNotif()
+
+  const handleMarkAsRead = async(notifId) => {
+    setLoadingMap(prevMap => ({ ...prevMap, [notifId]: true }))
+
+    try {
+      await markAsReadNotif(notifId)
+    } finally {
+      setLoadingMap(prevMap => ({ ...prevMap, [notifId]: false }))
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
@@ -67,40 +79,43 @@ const NotificationModal = ({ setShowNotification, notifications }) => {
           </>
         ) :
           <div className="p-4 overflow-y-auto flex-grow space-y-2">
-            {notifications?.map((notification) => (
-              <div key={notification._id} className="card border border-gray-300 px-4 py-2 rounded-lg bg-white shadow-md gap-3 relative">
-                <div className="flex items-center gap-4">
-                  <h2 className="font-semibold capitalize">
-                    {setIcon(notification.type)}
-                  </h2>
-                  <div className=" flex flex-col items-start gap-1">
-                    <p className="text-sm text-gray-600">
-                      {setMessage(authUser?.role, notification?.type, notification?.recipients)}
-                    </p>
-                    <span className="text-xs text-gray-400">
-                      {new Date(notification.createdAt).toLocaleString()}
-                    </span>
-                    <span className="text-xs text-blue-600 hover:underline cursor-pointer inline" onClick={() => {
-                      setShowNotification(false)
-                      notification?.relatedUser ? navigate(`/users`) : navigate(`/tickets/${notification?.relatedTicket}`)
-                    }}>
-                      View
-                    </span>
+            {notifications?.map((notification) => {
+              const isLoading = loadingMap[notification._id] || false
+              return (
+                <div key={notification._id} className="card border border-gray-300 px-4 py-2 rounded-lg bg-white shadow-md gap-3 relative">
+                  <div className="flex items-center gap-4">
+                    <h2 className="font-semibold capitalize">
+                      {setIcon(notification.type)}
+                    </h2>
+                    <div className=" flex flex-col items-start gap-1">
+                      <p className="text-sm text-gray-600">
+                        {setMessage(authUser?.role, notification?.type, notification?.recipients)}
+                      </p>
+                      <span className="text-xs text-gray-400">
+                        {new Date(notification.createdAt).toLocaleString()}
+                      </span>
+                      <span className="text-xs text-blue-600 hover:underline cursor-pointer inline" onClick={() => {
+                        setShowNotification(false)
+                        notification?.relatedUser ? navigate(`/users`) : navigate(`/tickets/${notification?.relatedTicket}`)
+                      }}>
+                        View
+                      </span>
+                    </div>
                   </div>
+                  {isReadNotif(notification?.isReadByUser, authUser?._id) &&
+                    <div className={`ml-auto absolute ${isLoading ? 'bottom-0' : 'bottom-1.5'} right-2`}>
+                        <button className="text-blue-600 text-sm hover:underline" onClick={() => handleMarkAsRead(notification._id)} disabled={isLoading}>
+                          {isLoading ? (
+                            <Loader className="animate-spin size-5 text-blue-600" />
+                          ) : (
+                            'Mark as Read'
+                          )}
+                        </button>
+                    </div>
+                  }
                 </div>
-                {isReadNotif(notification?.isReadByUser, authUser?._id) &&
-                  <div className={`ml-auto absolute ${isPending ? 'bottom-0' : 'bottom-1.5'} right-2`}>
-                      <button className="text-blue-600 text-sm hover:underline" onClick={() => markAsReadNotif(notification._id)} disabled={isPending}>
-                        {isPending ? (
-                          <Loader className="animate-spin size-5 text-blue-600" />
-                        ) : (
-                          'Mark as Read'
-                        )}
-                      </button>
-                  </div>
-                }
-              </div>
-            ))}
+              )
+            })}
           </div>
         }
       </div>
