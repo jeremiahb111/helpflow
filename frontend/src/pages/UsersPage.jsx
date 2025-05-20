@@ -103,7 +103,7 @@ const UsersPage = () => {
       </div>
 
       {/* Table */}
-      <div className="border border-base-300 rounded-lg overflow-hidden h-full flex flex-col mt-6">
+      <div className="border border-base-300 rounded-lg overflow-hidden h-full flex flex-col mt-4">
         <div className="overflow-y-auto flex-1">
           <table className="table w-full border-separate border-spacing-0 border-base-300">
             <thead className='bg-gray-300 sticky top-0 z-10'>
