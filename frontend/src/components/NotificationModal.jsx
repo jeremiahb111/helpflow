@@ -95,7 +95,6 @@ const NotificationModal = ({ setShowNotification, notifications }) => {
                           <Loader className="animate-spin size-5 text-blue-600" />
                         ) : (
                           'Mark as Read'
-
                         )}
                       </button>
                   </div>
