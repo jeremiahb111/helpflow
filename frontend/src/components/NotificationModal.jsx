@@ -1,4 +1,4 @@
-import { MessageCircleMore, Ticket, UserPlus2, XIcon } from "lucide-react";
+import { Loader, MessageCircleMore, Ticket, UserPlus2, XIcon } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 import useMarkAsReadNotif from "../hooks/useMarkAsReadNotif";
@@ -89,8 +89,15 @@ const NotificationModal = ({ setShowNotification, notifications }) => {
                   </div>
                 </div>
                 {isReadNotif(notification?.isReadByUser, authUser?._id) &&
-                  <div className="ml-auto absolute bottom-2 right-2">
-                    <button className="text-blue-600 text-sm hover:underline" onClick={() => markAsReadNotif(notification._id)}>Mark as Read</button>
+                  <div className={`ml-auto absolute bottom-${isPending ? '0' : '1.5'} right-2`}>
+                      <button className="text-blue-600 text-sm hover:underline" onClick={() => markAsReadNotif(notification._id)} disabled={isPending}>
+                        {isPending ? (
+                          <Loader className="animate-spin size-5 text-blue-600" />
+                        ) : (
+                          'Mark as Read'
+
+                        )}
+                      </button>
                   </div>
                 }
               </div>
