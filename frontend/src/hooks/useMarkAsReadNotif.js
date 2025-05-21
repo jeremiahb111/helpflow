@@ -4,7 +4,7 @@ import { markAsReadNotification } from "../lib/api"
 const useMarkAsReadNotif = () => {
   const queryClient = useQueryClient()
 
-  const { mutate: markAsReadNotif, isPending } = useMutation({
+  const { mutateAsync: markAsReadNotif, isPending } = useMutation({
     mutationFn: markAsReadNotification,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }),
   })

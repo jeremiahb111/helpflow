@@ -8,7 +8,6 @@ import PageLoader from './components/PageLoader'
 import Layout from './components/Layout'
 import { Toaster } from 'sonner'
 import UsersPage from './pages/UsersPage'
-import NotificationPage from './pages/NotificationPage'
 
 const App = () => {
   const { authUser, isLoading } = useAuth()
@@ -35,13 +34,6 @@ const App = () => {
             <TicketPage />
           </Layout>
         ) : <Navigate to="/login" />} />
-        <Route path="/notifications" element={isAuthenticated ? (
-          <Layout>
-            <NotificationPage />
-          </Layout>
-        ) : (
-          <Navigate to="/login" />
-        )} />
         <Route path="/users" element={isAuthenticated && isAdmin ? (
           <Layout>
             <UsersPage />

@@ -49,7 +49,7 @@ const UsersPage = () => {
   if (isLoading) return <PageLoader />
 
   return (
-    <div className="p-6">
+    <div className="p-6 h-screen flex flex-col">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between w-full gap-4">
           <h1 className="text-4xl font-bold">Users</h1>
@@ -103,44 +103,46 @@ const UsersPage = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="table w-full border border-base-300 mt-6">
-          <thead className='bg-gray-300'>
-            <tr>
-              <th className="border border-base-300">#</th>
-              <th className="border border-base-300">Full Name</th>
-              <th className="border border-base-300">Email</th>
-              <th className="border border-base-300">Role</th>
-              <th className="border border-base-300">Status</th>
-              <th className="border border-base-300">Created Date</th>
-              <th className="border border-base-300">Update Date</th>
-              <th className="border border-base-300">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.users.map((user, index) => (
-              <tr key={user._id} className="hover:bg-base-300 cursor-pointer transition">
-                <td className="border border-base-300">{(filters?.page - 1) * users?.limit + index + 1}</td>
-                <td className="border border-base-300">{user.fullName}</td>
-                <td className="border border-base-300">{user.email}</td>
-                <td className="border border-base-300 capitalize">{user.role}</td>
-                <td className="border border-base-300">{user.isActive ? "Active" : "Inactive"}</td>
-                <td className="border border-base-300">{format(user.createdAt, 'MM/dd/yyyy')}</td>
-                <td className="border border-base-300">{format(user.updatedAt, 'MM/dd/yyyy')}</td>
-                <td className="border border-base-300">
-                  <div className="flex gap-2">
-                    <button className="btn btn-sm btn-outline btn-info hover:bg-info hover:text-white transition" onClick={() => {
-                      setSelectedUser(user)
-                      setViewProfile(true)
-                    }}>
-                      View
-                    </button>
-                  </div>
-                </td>
+      <div className="border border-base-300 rounded-lg overflow-hidden h-full flex flex-col mt-4">
+        <div className="overflow-y-auto flex-1">
+          <table className="table w-full border-separate border-spacing-0 border-base-300">
+            <thead className='bg-gray-300 sticky top-0 z-10'>
+              <tr>
+                <th className="border border-base-300 bg-gray-300">#</th>
+                <th className="border border-base-300 bg-gray-300">Full Name</th>
+                <th className="border border-base-300 bg-gray-300">Email</th>
+                <th className="border border-base-300 bg-gray-300">Role</th>
+                <th className="border border-base-300 bg-gray-300">Status</th>
+                <th className="border border-base-300 bg-gray-300">Created Date</th>
+                <th className="border border-base-300 bg-gray-300">Update Date</th>
+                <th className="border border-base-300 bg-gray-300">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users?.users.map((user, index) => (
+                <tr key={user._id} className="hover:bg-base-300 cursor-pointer transition">
+                  <td className="border border-base-300">{(filters?.page - 1) * users?.limit + index + 1}</td>
+                  <td className="border border-base-300">{user.fullName}</td>
+                  <td className="border border-base-300">{user.email}</td>
+                  <td className="border border-base-300 capitalize">{user.role}</td>
+                  <td className="border border-base-300">{user.isActive ? "Active" : "Inactive"}</td>
+                  <td className="border border-base-300">{format(user.createdAt, 'MM/dd/yyyy')}</td>
+                  <td className="border border-base-300">{format(user.updatedAt, 'MM/dd/yyyy')}</td>
+                  <td className="border border-base-300">
+                    <div className="flex gap-2">
+                      <button className="btn btn-sm btn-outline btn-info hover:bg-info hover:text-white transition" onClick={() => {
+                        setSelectedUser(user)
+                        setViewProfile(true)
+                      }}>
+                        View
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Pagination */}
