@@ -128,10 +128,13 @@ export const updateTicket = async (req, res, next) => {
 
   if (!ticket) throw new AppError(StatusCodes.NOT_FOUND, 'Ticket not found')
 
+  console.log(req.body)
+  console.log(ticket.assignedTo)
+
   const isCreatedByUser = ticket.createdBy.toString() === user._id.toString()
   const allowedUpdates = isCreatedByUser ? ['title', 'description', 'image', 'priority', 'status'] : ['status']
 
-  if (isCreatedByUser && ticket.assignedTo) throw new AppError(StatusCodes.BAD_REQUEST, 'You can\'t assign your filed ticket to yourself')
+  // if (isCreatedByUser && ticket.assignedTo) throw new AppError(StatusCodes.BAD_REQUEST, 'You can\'t assign your filed ticket to yourself')
 
   if ((!req.body && user.role === 'agent') || (req.body['assignedTo'] && user.role === 'admin')) {
 
